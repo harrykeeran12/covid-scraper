@@ -35,8 +35,6 @@ def covid_info(country):
     tablerows.append(rows.string)
 
 
-  print(tablerows)
-
   country = tablerows[1]
   totalcases= tablerows[2]
   totaldeaths = tablerows[4]
@@ -46,10 +44,12 @@ def covid_info(country):
 
 
 countries = all_countries()
-#This code below does not work, the only country it prints is Afghanistan, when it should print the other countries too
+#This code below does not work, the only country it prints is Afghanistan, when it should print the other countries
 """ for x in range(len(countries) // 5):
   country = countries[x]
   print(covid_info(country)) """
+#This code does work:
+print(covid_info(countries[1]))
 
 
 
