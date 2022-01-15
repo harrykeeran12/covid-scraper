@@ -24,11 +24,25 @@ async function countrySearch(data, country){
     }
   }
 }
-function findCountry(country){
-  const data = scrapeCompleteTable().then(function(result){
-  return countrySearch(result, country);
+async function findCountry(country){
+  const data = await scrapeCompleteTable().then(function(result){
+    return countrySearch(result, country);
   });
-  console.log(output);
+  return await data
 }
-findCountry('UK')
+
+async function countryData(country){
+  findCountry(country).then(function(result){
+    console.log('Country =', result[1])
+    console.log('Total Cases =', result[2])
+    console.log('Total Deaths =', result[4])
+    console.log('Total Recovered =', result[6])
+})
+}
+countryData('Iran').then(result => {
+  console.log(result)
+})
+
+
+
 
