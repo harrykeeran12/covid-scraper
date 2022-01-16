@@ -26,7 +26,23 @@ async function scrapeCompleteTable(){
   })
   browser.close()
   return listdata
+}
+
+async function scrapeWorldData(){
+  const url = 'https://www.worldometers.info/coronavirus/';
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(url);
   
+  const data = await page.evaluate(() => {
+    const trs = Array.from(document.querySelectorAll('#main_table_countries_today tbody .total_row_world'))
+    return trs.map(tr => tr.innerText)
+  });
+  const listdata = data.map(function(e){
+    return e.split('\t')
+  })
+  browser.close()
+  return listdata[0]
 }
 
 async function countrySearch(data, country){
@@ -56,8 +72,7 @@ async function getTotalData(){
     return allCountries(result);
   });
   
-  const countries = data
-  console.log(countries.length)
+  const countries = data;
   return await countries
 
   /* return await data; */
@@ -73,14 +88,17 @@ async function countryData(country){
     console.log('Total Recovered =', result[6])
 })
 }
-findCountry('USA').then(result => {
+
+/* findCountry('USA').then(result => {
+  console.log(result)
+}) */
+
+/* getTotalData().then(result=>{
+  console.log(result.sort())
+}) */
+
+scrapeWorldData().then(result=>{
   console.log(result)
 })
-getTotalData().then(result=>{
-  console.log(result)
-})
-
-
-
 
 
