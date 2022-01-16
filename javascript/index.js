@@ -1,5 +1,16 @@
 const puppeteer = require('puppeteer');
 
+function separateString(string, separator){
+  if ((string == " ") || (string == 'N/A') || (string == undefined)){
+    return '0'
+  }
+  else{
+    let separate = string.split(separator);
+    temp = separate.join('')
+    return temp
+  }
+  
+}
 async function scrapeCompleteTable(){
   const url = 'https://www.worldometers.info/coronavirus/';
   const browser = await puppeteer.launch();
@@ -17,6 +28,7 @@ async function scrapeCompleteTable(){
   return listdata
   
 }
+
 async function countrySearch(data, country){
   for (let i = 0; i < data.length; i++) {
     if (data[i][1] == country) {
@@ -24,12 +36,34 @@ async function countrySearch(data, country){
     }
   }
 }
+async function allCountries(data){
+  let countries = []
+  for (let i = 0; i < data.length; i++) {
+    countries.push(data[i][1])
+  }
+  return countries
+}
+
+
 async function findCountry(country){
   const data = await scrapeCompleteTable().then(function(result){
     return countrySearch(result, country);
   });
   return await data
 }
+async function getTotalData(){
+  const data = await scrapeCompleteTable().then(function(result){
+    return allCountries(result);
+  });
+  
+  const countries = data
+  console.log(countries.length)
+  return await countries
+
+  /* return await data; */
+  
+}
+
 
 async function countryData(country){
   findCountry(country).then(function(result){
@@ -39,9 +73,13 @@ async function countryData(country){
     console.log('Total Recovered =', result[6])
 })
 }
-countryData('Iran').then(result => {
+findCountry('USA').then(result => {
   console.log(result)
 })
+getTotalData().then(result=>{
+  console.log(result)
+})
+
 
 
 
